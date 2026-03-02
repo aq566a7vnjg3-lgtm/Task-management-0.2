@@ -772,9 +772,7 @@
   async function doGenerate(isRecalc){
     const missing = validateForGenerate(activeCase);
     if(missing.length){
-      alert('不足項目があります:
-' + missing.join('
-'));
+      alert('不足項目があります:\n' + missing.join('\n'));
       return;
     }
     const { tasks, derived } = generateTasks(activeCase, settings);
