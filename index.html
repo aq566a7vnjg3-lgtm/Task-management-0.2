@@ -482,38 +482,14 @@
       });
     }
     return arr;
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function applyFilter(list){
+  }  function applyFilter(list){
     const f = els.filter.value;
     if(f==='all') return list;
     if(f==='uncompleted') return list.filter(c=>(c.tasks||[]).some(t=>!t.done));
     if(f==='overdue') return list.filter(c=> (c.tasks||[]).some(t=>!t.done && classifyDue(t.dueDate)==='overdue'));
     if(f==='soon') return list.filter(c=> (c.tasks||[]).some(t=>!t.done && classifyDue(t.dueDate)==='soon'));
     return list;
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function applySearch(list){
+  }  function applySearch(list){
     const q = (els.search.value||'').trim();
     if(!q) return list;
     const qq = q.toLowerCase();
@@ -521,19 +497,7 @@
       const hay = [c.orderNo,c.frameNo,c.hopeNo,c.userName].filter(Boolean).join(' ').toLowerCase();
       return hay.includes(qq);
     });
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function renderList(){
+  }  function renderList(){
     const base = applySearch(applyFilter(applySort(cases)));
     els.caseList.innerHTML='';
 
@@ -566,19 +530,7 @@
       div.onclick=()=>selectCase(c.id);
       els.caseList.appendChild(div);
     });
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function setRegMethodRules(){
+  }  function setRegMethodRules(){
     if(els.carType.value==='軽' && els.regMethod.value==='OSS'){
       els.regMethodHint.textContent='軽自動車はOSS不可のため「書類代行」に変更してください。';
       els.regMethodHint.style.color='var(--danger)';
@@ -586,19 +538,7 @@
       els.regMethodHint.textContent='';
       els.regMethodHint.style.color='';
     }
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function renderKpis(){
+  }  function renderKpis(){
     if(!activeCase){ els.kpis.innerHTML=''; return; }
     const overdue = (activeCase.tasks||[]).filter(t=>!t.done && classifyDue(t.dueDate)==='overdue').length;
     const soon = (activeCase.tasks||[]).filter(t=>!t.done && classifyDue(t.dueDate)==='soon').length;
@@ -609,19 +549,7 @@
       <span class="badge warn">3日以内: <strong>${soon}</strong></span>
       <span class="badge">最終更新: <strong>${new Date(activeCase.updatedAt||0).toLocaleString('ja-JP')}</strong></span>
     `;
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function renderTopCards(){
+  }  function renderTopCards(){
     if(!activeCase){ els.topCards.innerHTML=''; return; }
     const tops = topDeadlines(activeCase);
     if(tops.length===0){
@@ -636,19 +564,7 @@
       card.innerHTML = `<div class="t">${x.label}</div><div class="d">${fmtJP(x.iso)}(${weekdayJP(x.iso)})</div><div class="p">${cls==='overdue'?'期限切れ':cls==='soon'?'まもなく':' '}</div>`;
       els.topCards.appendChild(card);
     });
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function renderTasks(){
+  }  function renderTasks(){
     els.taskBody.innerHTML='';
     (activeCase.tasks||[]).forEach(t=>{
       const tr=document.createElement('tr');
@@ -686,19 +602,7 @@
       };
       els.taskBody.appendChild(tr);
     });
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function fillForm(){
+  }  function fillForm(){
     if(!activeCase){
       els.form.style.display='none';
       els.emptyState.style.display='block';
@@ -774,38 +678,14 @@
     renderKpis();
     renderTopCards();
     updateGenerateButtons();
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function bindField(el, key, transform=(v)=>v){
+  }  function bindField(el, key, transform=(v)=>v){
     el.onchange = async ()=>{
       if(!activeCase) return;
       activeCase[key] = transform(el.value);
       setRegMethodRules();
       await persist();
     };
-  }
-
-  function bindCheckbox(el, key){
-    el.onchange = async ()=>{
-      if(!activeCase) return;
-      activeCase[key] = !!el.checked;
-      await persist();
-      renderList();
-      renderTopCards();
-    };
-  }
-
-  function updateGenerateButtons(){
+  }  function updateGenerateButtons(){
     if(!activeCase){
       els.btnGenerate.disabled = true;
       els.btnRecalc.disabled = true;
@@ -892,7 +772,9 @@
   async function doGenerate(isRecalc){
     const missing = validateForGenerate(activeCase);
     if(missing.length){
-      alert('不足項目があります:\n' + missing.join('\n'));
+      alert('不足項目があります:
+' + missing.join('
+'));
       return;
     }
     const { tasks, derived } = generateTasks(activeCase, settings);
