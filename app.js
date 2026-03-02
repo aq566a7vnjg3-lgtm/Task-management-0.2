@@ -232,9 +232,27 @@ export async function ensureSettings(){
 }
 
 export async function loadBuiltinHolidays(){
-  const res = await fetch('./data/holidays_2026_2030.json', { cache: 'no-store' });
-  if(!res.ok) throw new Error('祝日データの読み込みに失敗しました');
-  return await res.json();
+  // GitHub Pages (project pages) でも壊れないように、相対パスで解決する
+  // 互換のため、ルート配置と /data 配下の両方を試す
+  const candidates = [
+    new URL('./holidays_2026_2030.json', window.location.href).toString(),
+    new URL('./data/holidays_2026_2030.json', window.location.href).toString(),
+  ];
+
+  for(const url of candidates){
+    try{
+      const res = await fetch(url, { cache: 'no-store' });
+      if(!res.ok) continue;
+      const json = await res.json();
+      // 想定: [{date:'YYYY-MM-DD', name:'...'}, ...]
+      if(Array.isArray(json)) return json;
+    }catch(e){
+      // try next
+    }
+  }
+
+  console.warn('祝日データ(holidays_2026_2030.json)を読み込めませんでした。祝日判定なしで動作します。');
+  return [];
 }
 
 // --- Calendars ---
